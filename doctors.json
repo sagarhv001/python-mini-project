@@ -1,0 +1,40 @@
+{
+    "DOC-123": {
+        "id": "DOC-123",
+        "name": "Dr. Alice Smith",
+        "specialization": "Cardiology",
+        "patients": [
+            "HOS-1ae390b8-e92b-429a-961f-2886c2121245"
+        ],
+        "notes": {
+            "HOS-1ae390b8-e92b-429a-961f-2886c2121245": [
+                {
+                    "date": "2025-07-18",
+                    "note": "Day 1: stable, Treatment: MRI"
+                },
+                {
+                    "date": "2025-07-18",
+                    "note": "Day 2: stable, Treatment: Physical Checkup"
+                },
+                {
+                    "date": "2025-07-18",
+                    "note": "Day 3: stable, Treatment: Physical Checkup"
+                }
+            ]
+        }
+    },
+    "DOC-456": {
+        "id": "DOC-456",
+        "name": "Dr. Bob Lee",
+        "specialization": "General Medicine",
+        "assigned_patients": [],
+        "notes": {}
+    },
+    "DOC-789": {
+        "id": "DOC-789",
+        "name": "Dr. Cathy Patel",
+        "specialization": "Neurology",
+        "assigned_patients": [],
+        "notes": {}
+    }
+}
