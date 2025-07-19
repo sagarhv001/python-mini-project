@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Tracking System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-hospital"></i>
+                    <h1>Patient Tracking System</h1>
+                </div>
+                <div class="header-stats">
+                    <div class="stat-item">
+                        <span class="stat-number" id="total-patients">0</span>
+                        <span class="stat-label">Patients</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="total-doctors">0</span>
+                        <span class="stat-label">Doctors</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="navigation">
+        <div class="container">
+            <ul class="nav-menu">
+                <li><a href="#" onclick="showSection('dashboard')" class="nav-link active">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a></li>
+                <li><a href="#" onclick="showSection('register-doctor')" class="nav-link">
+                    <i class="fas fa-user-md"></i> Register Doctor
+                </a></li>
+                <li><a href="#" onclick="showSection('register-patient')" class="nav-link">
+                    <i class="fas fa-user-plus"></i> Register Patient
+                </a></li>
+                <li><a href="#" onclick="showSection('patients')" class="nav-link">
+                    <i class="fas fa-users"></i> All Patients
+                </a></li>
+                <li><a href="#" onclick="showSection('doctors')" class="nav-link">
+                    <i class="fas fa-stethoscope"></i> All Doctors
+                </a></li>
+                <li><a href="#" onclick="showSection('treatment')" class="nav-link">
+                    <i class="fas fa-pills"></i> Treatment
+                </a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            
+            <!-- Dashboard Section -->
+            <section id="dashboard" class="content-section active">
+                <div class="section-header">
+                    <h2><i class="fas fa-tachometer-alt"></i> Dashboard</h2>
+                    <button class="btn btn-primary" onclick="loadDashboard()">
+                        <i class="fas fa-sync"></i> Refresh
+                    </button>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon inpatient">
+                            <i class="fas fa-bed"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="inpatients-count">0</h3>
+                            <p>Inpatients</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon outpatient">
+                            <i class="fas fa-walking"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="outpatients-count">0</h3>
+                            <p>Outpatients</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon discharged">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="discharged-count">0</h3>
+                            <p>Discharged</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon revenue">
+                            <i class="fas fa-rupee-sign"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="total-revenue">₹0</h3>
+                            <p>Total Revenue</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-content">
+                    <div class="dashboard-section">
+                        <h3>Recent Patients</h3>
+                        <div id="recent-patients" class="patient-list">
+                            <!-- Recent patients will be loaded here -->
+                        </div>
+                    </div>
+                    
+                    <div class="dashboard-section">
+                        <h3>Inpatients</h3>
+                        <div id="current-inpatients" class="patient-list">
+                            <!-- Current inpatients will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Register Doctor Section -->
+            <section id="register-doctor" class="content-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-user-md"></i> Register Doctor</h2>
+                </div>
+                
+                <div class="form-container">
+                    <form id="doctor-form" class="form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="doctor-name">Doctor Name *</label>
+                                <input type="text" id="doctor-name" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="doctor-specialization">Specialization *</label>
+                                <select id="doctor-specialization" required>
+                                    <option value="">Select Specialization</option>
+                                    <option value="General Medicine">General Medicine</option>
+                                    <option value="Cardiology">Cardiology</option>
+                                    <option value="Pediatrics">Pediatrics</option>
+                                    <option value="Orthopedics">Orthopedics</option>
+                                    <option value="Neurology">Neurology</option>
+                                    <option value="Emergency Medicine">Emergency Medicine</option>
+                                    <option value="Surgery">Surgery</option>
+                                    <option value="Dermatology">Dermatology</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-user-plus"></i> Register Doctor
+                            </button>
+                            <button type="reset" class="btn btn-secondary">
+                                <i class="fas fa-times"></i> Clear
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Register Patient Section -->
+            <section id="register-patient" class="content-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-user-plus"></i> Register Patient</h2>
+                </div>
+                
+                <div class="form-container">
+                    <form id="patient-form" class="form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="patient-name">Patient Name *</label>
+                                <input type="text" id="patient-name" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="patient-age">Age *</label>
+                                <input type="number" id="patient-age" min="0" max="150" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="patient-gender">Gender *</label>
+                                <select id="patient-gender" required>
+                                    <option value="">Select Gender</option>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="symptoms">Symptoms *</label>
+                            <div class="symptoms-input">
+                                <input type="text" id="symptom-input" placeholder="Enter a symptom and press Enter">
+                                <button type="button" onclick="addSymptom()" class="btn btn-secondary">
+                                    <i class="fas fa-plus"></i> Add
+                                </button>
+                            </div>
+                            <div id="symptoms-list" class="symptoms-list">
+                                <!-- Symptoms will be added here -->
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="condition">Initial Condition *</label>
+                            <select id="condition" required>
+                                <option value="">Select Condition</option>
+                                <option value="normal">Normal</option>
+                                <option value="critical">Critical</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-user-plus"></i> Register Patient
+                            </button>
+                            <button type="reset" class="btn btn-secondary" onclick="clearPatientForm()">
+                                <i class="fas fa-times"></i> Clear
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <!-- All Patients Section -->
+            <section id="patients" class="content-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-users"></i> All Patients</h2>
+                    <button class="btn btn-primary" onclick="loadPatients()">
+                        <i class="fas fa-sync"></i> Refresh
+                    </button>
+                </div>
+                
+                <div class="table-container">
+                    <table id="patients-table" class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Patient ID</th>
+                                <th>Name</th>
+                                <th>Age</th>
+                                <th>Gender</th>
+                                <th>Status</th>
+                                <th>Assigned Doctor</th>
+                                <th>Bill Amount</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Patient data will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- All Doctors Section -->
+            <section id="doctors" class="content-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-stethoscope"></i> All Doctors</h2>
+                    <button class="btn btn-primary" onclick="loadDoctors()">
+                        <i class="fas fa-sync"></i> Refresh
+                    </button>
+                </div>
+                
+                <div class="table-container">
+                    <table id="doctors-table" class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Doctor ID</th>
+                                <th>Name</th>
+                                <th>Specialization</th>
+                                <th>Patients Count</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Doctor data will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Treatment Section -->
+            <section id="treatment" class="content-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-pills"></i> Simulate Treatment</h2>
+                </div>
+                
+                <div class="form-container">
+                    <form id="treatment-form" class="form">
+                        <div class="form-group">
+                            <label for="treatment-patient-id">Patient ID *</label>
+                            <input type="text" id="treatment-patient-id" placeholder="Enter Patient ID" required>
+                            <button type="button" onclick="searchPatientForTreatment()" class="btn btn-secondary search-btn">
+                                <i class="fas fa-search"></i> Search
+                            </button>
+                        </div>
+                        
+                        <div id="patient-info" class="patient-info" style="display: none;">
+                            <!-- Patient information will be displayed here -->
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="condition-note">Condition Update *</label>
+                                <textarea id="condition-note" rows="3" placeholder="Enter condition update" required></textarea>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="treatment-details">Treatment/Test Conducted *</label>
+                                <textarea id="treatment-details" rows="3" placeholder="Enter treatment or test details" required></textarea>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="discharge-patient">
+                                Discharge Patient
+                            </label>
+                        </div>
+                        
+                        <div id="discharge-section" style="display: none;">
+                            <div class="form-group">
+                                <label for="bill-amount">Total Bill Amount (₹) *</label>
+                                <input type="number" id="bill-amount" min="0" step="0.01">
+                            </div>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Record Treatment
+                            </button>
+                            <button type="reset" class="btn btn-secondary">
+                                <i class="fas fa-times"></i> Clear
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Patient Details Modal -->
+    <div id="patient-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-patient-title">Patient Details</h3>
+                <span class="modal-close" onclick="closeModal('patient-modal')">&times;</span>
+            </div>
+            <div class="modal-body" id="patient-modal-body">
+                <!-- Patient details will be loaded here -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('patient-modal')">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div id="loading" class="loading" style="display: none;">
+        <div class="spinner"></div>
+        <p>Loading...</p>
+    </div>
+
+    <!-- Notification Container -->
+    <div id="notification-container" class="notification-container">
+        <!-- Notifications will be added here -->
+    </div>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
