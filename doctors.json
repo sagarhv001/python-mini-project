@@ -27,7 +27,9 @@
         "id": "DOC-456",
         "name": "Dr. Bob Lee",
         "specialization": "General Medicine",
-        "assigned_patients": [],
+        "patients": [
+            "HOS-08d06f71-cfbe-4333-aea6-f82d707f66fc"
+        ],
         "notes": {}
     },
     "DOC-789": {
