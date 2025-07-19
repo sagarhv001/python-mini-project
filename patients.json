@@ -1,0 +1,23 @@
+{
+    "HOS-83fb9ac2-0c0c-4795-b211-5e25e0a8c3a5": {
+        "id": "HOS-83fb9ac2-0c0c-4795-b211-5e25e0a8c3a5",
+        "name": "ma",
+        "age": "20",
+        "gender": "male",
+        "symptoms": [
+            "chest pain",
+            "cough"
+        ],
+        "assigned_doctor": "Dr. Alice Smith",
+        "status": "outpatient",
+        "history": [
+            {
+                "date": "2025-07-19",
+                "notes": "Outpatient advice by Dr. Alice Smith"
+            }
+        ],
+        "admission": null,
+        "discharge_date": null,
+        "bill_amount": 0
+    }
+}

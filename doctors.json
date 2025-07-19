@@ -4,7 +4,8 @@
         "name": "Dr. Alice Smith",
         "specialization": "Cardiology",
         "patients": [
-            "HOS-1ae390b8-e92b-429a-961f-2886c2121245"
+            "HOS-1ae390b8-e92b-429a-961f-2886c2121245",
+            "HOS-83fb9ac2-0c0c-4795-b211-5e25e0a8c3a5"
         ],
         "notes": {
             "HOS-1ae390b8-e92b-429a-961f-2886c2121245": [
@@ -36,7 +37,9 @@
         "id": "DOC-789",
         "name": "Dr. Cathy Patel",
         "specialization": "Neurology",
-        "assigned_patients": [],
+        "patients": [
+            "HOS-32fa23f8-bed7-4e6e-8911-de6df52c9612"
+        ],
         "notes": {}
     }
 }
