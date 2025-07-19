@@ -1,31 +1,31 @@
-2025-07-18 22:35:02,414 [INFO] ==================================================
-2025-07-18 22:35:02,414 [INFO] Starting Test Module: TestPatient
-2025-07-18 22:35:02,414 [INFO] ==================================================
-2025-07-18 22:35:02,414 [INFO] ---- Running test: test_add_history ----
-2025-07-18 22:35:02,429 [INFO] Setting up test case: test_add_history
-2025-07-18 22:35:02,429 [INFO] Tearing down test case: test_add_history
-2025-07-18 22:35:02,429 [INFO] Test PASSED: test_add_history
-2025-07-18 22:35:02,429 [INFO] ----------------------------
-2025-07-18 22:35:02,429 [INFO] ---- Running test: test_admit_discharge ----
-2025-07-18 22:35:02,429 [INFO] Setting up test case: test_admit_discharge
-2025-07-18 22:35:02,429 [INFO] Tearing down test case: test_admit_discharge
-2025-07-18 22:35:02,429 [INFO] Test PASSED: test_admit_discharge
-2025-07-18 22:35:02,429 [INFO] ----------------------------
-2025-07-18 22:35:02,429 [INFO] ---- Running test: test_json_save_and_load ----
-2025-07-18 22:35:02,429 [INFO] Setting up test case: test_json_save_and_load
-2025-07-18 22:35:02,459 [INFO] Tearing down test case: test_json_save_and_load
-2025-07-18 22:35:02,459 [INFO] Test PASSED: test_json_save_and_load
-2025-07-18 22:35:02,459 [INFO] ----------------------------
-2025-07-18 22:35:02,463 [INFO] ---- Running test: test_patient_creation ----
-2025-07-18 22:35:02,465 [INFO] Setting up test case: test_patient_creation
-2025-07-18 22:35:02,465 [INFO] Tearing down test case: test_patient_creation
-2025-07-18 22:35:02,466 [INFO] Test PASSED: test_patient_creation
-2025-07-18 22:35:02,466 [INFO] ----------------------------
-2025-07-18 22:35:02,468 [INFO] ---- Running test: test_set_outpatient ----
-2025-07-18 22:35:02,469 [INFO] Setting up test case: test_set_outpatient
-2025-07-18 22:35:02,469 [INFO] Tearing down test case: test_set_outpatient
-2025-07-18 22:35:02,469 [INFO] Test PASSED: test_set_outpatient
-2025-07-18 22:35:02,469 [INFO] ----------------------------
-2025-07-18 22:35:02,469 [INFO] ==================================================
-2025-07-18 22:35:02,474 [INFO] Finishing Test Module: TestPatient
-2025-07-18 22:35:02,475 [INFO] ==================================================
+2025-07-19 12:50:00,672 [INFO] ==================================================
+2025-07-19 12:50:00,672 [INFO] Starting Test Module: TestPatient
+2025-07-19 12:50:00,673 [INFO] ==================================================
+2025-07-19 12:50:00,673 [INFO] ---- Running test: test_add_history ----
+2025-07-19 12:50:00,673 [INFO] Setting up test case: test_add_history
+2025-07-19 12:50:00,673 [INFO] Tearing down test case: test_add_history
+2025-07-19 12:50:00,674 [INFO] Test PASSED: test_add_history
+2025-07-19 12:50:00,674 [INFO] ----------------------------
+2025-07-19 12:50:00,674 [INFO] ---- Running test: test_admit_discharge ----
+2025-07-19 12:50:00,674 [INFO] Setting up test case: test_admit_discharge
+2025-07-19 12:50:00,675 [INFO] Tearing down test case: test_admit_discharge
+2025-07-19 12:50:00,675 [INFO] Test PASSED: test_admit_discharge
+2025-07-19 12:50:00,675 [INFO] ----------------------------
+2025-07-19 12:50:00,675 [INFO] ---- Running test: test_json_save_and_load ----
+2025-07-19 12:50:00,676 [INFO] Setting up test case: test_json_save_and_load
+2025-07-19 12:50:00,678 [INFO] Tearing down test case: test_json_save_and_load
+2025-07-19 12:50:00,678 [INFO] Test PASSED: test_json_save_and_load
+2025-07-19 12:50:00,678 [INFO] ----------------------------
+2025-07-19 12:50:00,679 [INFO] ---- Running test: test_patient_creation ----
+2025-07-19 12:50:00,679 [INFO] Setting up test case: test_patient_creation
+2025-07-19 12:50:00,680 [INFO] Tearing down test case: test_patient_creation
+2025-07-19 12:50:00,681 [INFO] Test PASSED: test_patient_creation
+2025-07-19 12:50:00,682 [INFO] ----------------------------
+2025-07-19 12:50:00,682 [INFO] ---- Running test: test_set_outpatient ----
+2025-07-19 12:50:00,682 [INFO] Setting up test case: test_set_outpatient
+2025-07-19 12:50:00,683 [INFO] Tearing down test case: test_set_outpatient
+2025-07-19 12:50:00,683 [INFO] Test PASSED: test_set_outpatient
+2025-07-19 12:50:00,683 [INFO] ----------------------------
+2025-07-19 12:50:00,683 [INFO] ==================================================
+2025-07-19 12:50:00,684 [INFO] Finishing Test Module: TestPatient
+2025-07-19 12:50:00,684 [INFO] ==================================================
