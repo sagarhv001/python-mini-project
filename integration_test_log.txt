@@ -1,31 +1,31 @@
-2025-07-19 12:58:27,853 [INFO] ==================================================
-2025-07-19 12:58:27,854 [INFO] Starting Test Module: TestPatientIntegration
-2025-07-19 12:58:27,854 [INFO] ==================================================
-2025-07-19 12:58:27,855 [INFO] ---- Running test: test_full_patient_lifecycle ----
-2025-07-19 12:58:27,855 [INFO] Setting up test case: test_full_patient_lifecycle
-2025-07-19 12:58:27,859 [INFO] Tearing down test case: test_full_patient_lifecycle
-2025-07-19 12:58:27,859 [INFO] Test PASSED: test_full_patient_lifecycle
-2025-07-19 12:58:27,859 [INFO] ----------------------------
-2025-07-19 12:58:27,860 [INFO] ---- Running test: test_load_patients_from_json ----
-2025-07-19 12:58:27,860 [INFO] Setting up test case: test_load_patients_from_json
-2025-07-19 12:58:27,863 [INFO] Tearing down test case: test_load_patients_from_json
-2025-07-19 12:58:27,864 [INFO] Test PASSED: test_load_patients_from_json
-2025-07-19 12:58:27,864 [INFO] ----------------------------
-2025-07-19 12:58:27,864 [INFO] ---- Running test: test_multiple_patients_json ----
-2025-07-19 12:58:27,865 [INFO] Setting up test case: test_multiple_patients_json
-2025-07-19 12:58:27,869 [INFO] Tearing down test case: test_multiple_patients_json
-2025-07-19 12:58:27,870 [INFO] Test PASSED: test_multiple_patients_json
-2025-07-19 12:58:27,870 [INFO] ----------------------------
-2025-07-19 12:58:27,870 [INFO] ---- Running test: test_outpatient_then_admit ----
-2025-07-19 12:58:27,871 [INFO] Setting up test case: test_outpatient_then_admit
-2025-07-19 12:58:27,883 [INFO] Tearing down test case: test_outpatient_then_admit
-2025-07-19 12:58:27,884 [INFO] Test PASSED: test_outpatient_then_admit
-2025-07-19 12:58:27,884 [INFO] ----------------------------
-2025-07-19 12:58:27,885 [INFO] ---- Running test: test_register_and_admit_patient ----
-2025-07-19 12:58:27,885 [INFO] Setting up test case: test_register_and_admit_patient
-2025-07-19 12:58:27,888 [INFO] Tearing down test case: test_register_and_admit_patient
-2025-07-19 12:58:27,888 [INFO] Test PASSED: test_register_and_admit_patient
-2025-07-19 12:58:27,888 [INFO] ----------------------------
-2025-07-19 12:58:27,889 [INFO] ==================================================
-2025-07-19 12:58:27,889 [INFO] Finishing Test Module: TestPatientIntegration
-2025-07-19 12:58:27,890 [INFO] ==================================================
+2025-07-19 13:13:59,748 [INFO] ==================================================
+2025-07-19 13:13:59,748 [INFO] Starting Test Module: TestPatientIntegration
+2025-07-19 13:13:59,749 [INFO] ==================================================
+2025-07-19 13:13:59,749 [INFO] ---- Running test: test_full_patient_lifecycle ----
+2025-07-19 13:13:59,749 [INFO] Setting up test case: test_full_patient_lifecycle
+2025-07-19 13:13:59,754 [INFO] Tearing down test case: test_full_patient_lifecycle
+2025-07-19 13:13:59,754 [INFO] Test PASSED: test_full_patient_lifecycle
+2025-07-19 13:13:59,754 [INFO] ----------------------------
+2025-07-19 13:13:59,754 [INFO] ---- Running test: test_load_patients_from_json ----
+2025-07-19 13:13:59,755 [INFO] Setting up test case: test_load_patients_from_json
+2025-07-19 13:13:59,758 [INFO] Tearing down test case: test_load_patients_from_json
+2025-07-19 13:13:59,758 [INFO] Test PASSED: test_load_patients_from_json
+2025-07-19 13:13:59,758 [INFO] ----------------------------
+2025-07-19 13:13:59,758 [INFO] ---- Running test: test_multiple_patients_json ----
+2025-07-19 13:13:59,758 [INFO] Setting up test case: test_multiple_patients_json
+2025-07-19 13:13:59,763 [INFO] Tearing down test case: test_multiple_patients_json
+2025-07-19 13:13:59,763 [INFO] Test PASSED: test_multiple_patients_json
+2025-07-19 13:13:59,763 [INFO] ----------------------------
+2025-07-19 13:13:59,764 [INFO] ---- Running test: test_outpatient_then_admit ----
+2025-07-19 13:13:59,764 [INFO] Setting up test case: test_outpatient_then_admit
+2025-07-19 13:13:59,770 [INFO] Tearing down test case: test_outpatient_then_admit
+2025-07-19 13:13:59,770 [INFO] Test PASSED: test_outpatient_then_admit
+2025-07-19 13:13:59,771 [INFO] ----------------------------
+2025-07-19 13:13:59,771 [INFO] ---- Running test: test_register_and_admit_patient ----
+2025-07-19 13:13:59,771 [INFO] Setting up test case: test_register_and_admit_patient
+2025-07-19 13:13:59,776 [INFO] Tearing down test case: test_register_and_admit_patient
+2025-07-19 13:13:59,776 [INFO] Test PASSED: test_register_and_admit_patient
+2025-07-19 13:13:59,776 [INFO] ----------------------------
+2025-07-19 13:13:59,778 [INFO] ==================================================
+2025-07-19 13:13:59,779 [INFO] Finishing Test Module: TestPatientIntegration
+2025-07-19 13:13:59,779 [INFO] ==================================================

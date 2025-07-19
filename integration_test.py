@@ -81,7 +81,7 @@ class TestPatientIntegration(unittest.TestCase):
         except Exception as e:
             logging.exception("Test ERRORED: %s (%s)", test_name, e)
         logging.info("----------------------------")
-
+#Register, admit, add history
     def test_register_and_admit_patient(self):
         p = Patient("Grace", 36, "Female", ["dizziness"])
         save_patient_to_json(p)
@@ -93,7 +93,7 @@ class TestPatientIntegration(unittest.TestCase):
         self.assertEqual(data[p.id]['status'], 'inpatient')
         self.assertEqual(len(data[p.id]['history']), 1)
         self.assertIn("Initial tests performed", data[p.id]['history'][0]['notes'])
-
+#Full lifecycle: register → admit → discharge
     def test_full_patient_lifecycle(self):
         p = Patient("Henry", 50, "Male", ["fracture"])
         save_patient_to_json(p)
@@ -108,7 +108,7 @@ class TestPatientIntegration(unittest.TestCase):
         self.assertIsNotNone(data[p.id]['discharge_date'])
         self.assertEqual(len(data[p.id]['history']), 1)
         self.assertIn("X-ray done", data[p.id]['history'][0]['notes'])
-
+#Outpatient converted to inpatient
     def test_outpatient_then_admit(self):
         p = Patient("Ivy", 29, "Female", ["migraine"])
         p.set_outpatient("Prescribed medication")
@@ -122,7 +122,7 @@ class TestPatientIntegration(unittest.TestCase):
         self.assertEqual(len(data[p.id]['history']), 2)
         self.assertIn("Prescribed medication", data[p.id]['history'][0]['notes'])
         self.assertIn("Admitted for observation", data[p.id]['history'][1]['notes'])
-
+#Saving multiple patients
     def test_multiple_patients_json(self):
         p1 = Patient("Jack", 40, "Male", ["cough"])
         p2 = Patient("Kate", 34, "Female", ["fever"])
@@ -134,7 +134,7 @@ class TestPatientIntegration(unittest.TestCase):
         self.assertIn(p2.id, data)
         self.assertEqual(data[p1.id]['name'], "Jack")
         self.assertEqual(data[p2.id]['name'], "Kate")
-
+#Loading from JSON manually
     def test_load_patients_from_json(self):
         p = Patient("Liam", 55, "Male", ["hypertension"])
         save_patient_to_json(p)
