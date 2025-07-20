@@ -315,10 +315,13 @@
                                 <label for="condition-note">Condition Update *</label>
                                 <textarea id="condition-note" rows="3" placeholder="Enter condition update" required></textarea>
                             </div>
-                            
                             <div class="form-group">
                                 <label for="treatment-details">Treatment/Test Conducted *</label>
                                 <textarea id="treatment-details" rows="3" placeholder="Enter treatment or test details" required></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="treatment-cost">Treatment/Test Cost (₹) *</label>
+                                <input type="number" id="treatment-cost" min="0" step="0.01" placeholder="Enter cost for this treatment/test" required>
                             </div>
                         </div>
                         
@@ -329,12 +332,7 @@
                             </label>
                         </div>
                         
-                        <div id="discharge-section" style="display: none;">
-                            <div class="form-group">
-                                <label for="bill-amount">Total Bill Amount (₹) *</label>
-                                <input type="number" id="bill-amount" min="0" step="0.01">
-                            </div>
-                        </div>
+                        <!-- Discharge section removed: bill is now auto-calculated -->
                         
                         <div class="form-actions">
                             <button type="submit" class="btn btn-primary">

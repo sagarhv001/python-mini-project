@@ -28,6 +28,9 @@ class Doctor:
 
     def discharge_patient(self, patient, bill):
         patient.discharge(bill)
+        # Remove patient from doctor's patient list
+        if patient.id in self.patients:
+            self.patients.remove(patient.id)
         print(f"Dr. {self.name} discharged {patient.name} with bill ₹{bill}")
 
     def to_dict(self):

@@ -39,21 +39,34 @@ class Patient:
         self.admission = None
         self.discharge_date = None
         self.bill_amount = 0
-    def add_history(self, notes):
+    def add_history(self, notes, cost=0):
         self.history.append({
             'date': datetime.now().strftime("%Y-%m-%d"),
-            'notes': notes
+            'notes': notes,
+            'cost': cost
         })
+        # Add cost to running total
+        if not hasattr(self, 'treatment_total_cost'):
+            self.treatment_total_cost = 0
+        self.treatment_total_cost += cost
+        self.bill_amount = self.treatment_total_cost
     def admit(self):
         self.admission = datetime.now().strftime("%Y-%m-%d")
         self.status = 'inpatient'
-    def discharge(self, bill):
+    def discharge(self, bill=None):
         self.discharge_date = datetime.now().strftime("%Y-%m-%d")
+        if self.status == 'inpatient' or self.admission:
+            self.bill_amount = sum(entry.get('cost', 0) for entry in self.history)
+        elif bill is not None:
+            self.bill_amount = bill
         self.status = 'discharged'
-        self.bill_amount = bill
+        # For inpatients, bill is sum of all treatment costs
+        
+        # For outpatients, bill_amount should already be set by set_outpatient
+        
     def set_outpatient(self, notes):
         self.status = 'outpatient'
-        self.add_history(notes)
+        self.bill_amount = 500  # Set a constant consultation fee for outpatients
     def to_dict(self):
         return {
             "id": self.id,
@@ -66,7 +79,8 @@ class Patient:
             "history": self.history,
             "admission": self.admission,
             "discharge_date": self.discharge_date,
-            "bill_amount": self.bill_amount
+            "bill_amount": self.bill_amount,
+            "treatment_total_cost": getattr(self, 'treatment_total_cost', 0)
         }
 patients = {}
 def save_patient_to_json(patient):

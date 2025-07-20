@@ -4,60 +4,45 @@
         "name": "Dr. Alice Smith",
         "specialization": "Cardiology",
         "patients": [
-            "PAT-c446a",
-            "PAT-b4bf1"
+            
         ],
-        "notes": {
-            "PAT-b4bf1": [
-                {
-                    "date": "2025-07-20",
-                    "note": "stable, Treatment: Angiogram"
-                },
-                {
-                    "date": "2025-07-20",
-                    "note": "stable, Treatment: Physical test"
-                },
-                {
-                    "date": "2025-07-20",
-                    "note": "normal, Treatment: none"
-                }
-            ]
-        }
+        "notes": {}
     },
     "DOC-456": {
         "id": "DOC-456",
         "name": "Dr. Bob Lee",
         "specialization": "General Medicine",
         "patients": [
-            "PAT-860f7"
+            "PAT-9154e"
         ],
-        "notes": {}
+        "notes": {
+                       
+        }
     },
     "DOC-789": {
         "id": "DOC-789",
         "name": "Dr. Cathy Patel",
         "specialization": "Neurology",
         "patients": [
-            "PAT-06aa7"
+            
         ],
         "notes": {}
     },
     "DOC-40eae917-4ada-4511-acc9-c0b1a2a57179": {
-        "id": "DOC-112",
+        "id": "DOC-40eae917-4ada-4511-acc9-c0b1a2a57179",
         "name": "Dr. Xavier",
         "specialization": "Cardiology",
-        "patients": [
-            "PAT-816df"
-        ],
-        "notes": {}
+        "patients": [],
+        "notes": {
+            
+            
+        }
     },
     "DOC-6267b162-219e-4159-83b4-895dbd2b7686": {
         "id": "DOC-6267b162-219e-4159-83b4-895dbd2b7686",
         "name": "Dr. Zhang",
         "specialization": "General Medicine",
-        "patients": [
-            "PAT-ae7ff"
-        ],
+        "patients": [],
         "notes": {}
     }
 }

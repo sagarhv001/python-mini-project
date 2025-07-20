@@ -157,8 +157,8 @@ def simulate_treatment():
         patient_id = data.get('patient_id', '').strip()
         note = data.get('note', '').strip()
         treatment = data.get('treatment', '').strip()
+        cost = float(data.get('cost', 0))
         discharge = data.get('discharge', False)
-        bill_amount = data.get('bill_amount', 0)
         
         if patient_id not in patients:
             return jsonify({
@@ -187,14 +187,18 @@ def simulate_treatment():
                 'error': 'Assigned doctor not found'
             }), 404
         
-        # Add treatment note
+        # Add treatment note and cost
         treatment_note = f"{note}, Treatment: {treatment}"
         doctor.log_condition(patient.id, treatment_note)
-        patient.add_history(treatment_note)
-        
+        patient.add_history(treatment_note, cost=cost)
+        # Always update bill_amount and treatment_total_cost
+        if not hasattr(patient, 'treatment_total_cost'):
+            patient.treatment_total_cost = 0
+        patient.bill_amount = patient.treatment_total_cost
         if discharge:
-            doctor.discharge_patient(patient, bill_amount)
-            message = f"Patient {patient.name} discharged with bill ₹{bill_amount}"
+            total_cost = sum(entry.get('cost', 0) for entry in patient.history)
+            doctor.discharge_patient(patient, total_cost)
+            message = f"Patient {patient.name} discharged with bill ₹{total_cost}"
         else:
             message = f"Treatment recorded for {patient.name}"
         

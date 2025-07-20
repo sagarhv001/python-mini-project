@@ -31,12 +31,15 @@ def simulate_treatment(patient, doctor):
         print(f"\n--- Day {day} ---")
         note = input("Enter condition update: ")
         treatment = input("Treatment/Test conducted: ")
-        doctor.log_condition(patient.id, f"Day {day}: {note}, Treatment: {treatment}")
-        patient.add_history(f"Day {day}: {note}, Treatment: {treatment}")
+        cost = float(input("Enter cost for this treatment/test: ₹"))
+        doctor.log_condition(patient.id, f"Day {day}: {note}, Treatment: {treatment}, Cost: ₹{cost}")
+        patient.add_history(f"Day {day}: {note}, Treatment: {treatment}", cost=cost)
 
         if input("Discharge patient? (y/n): ").lower() == 'y':
-            bill = int(input("Enter total bill amount: ₹"))
-            doctor.discharge_patient(patient, bill)
+            # Calculate total cost from history
+            total_cost = sum(entry.get('cost', 0) for entry in patient.history)
+            doctor.discharge_patient(patient, total_cost)
+            print(f"Total bill amount: ₹{total_cost}")
             break
 
     save_patient_to_json(patient)

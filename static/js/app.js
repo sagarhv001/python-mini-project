@@ -731,37 +731,31 @@ async function handleTreatment(e) {
     const patientId = document.getElementById('treatment-patient-id').value.trim();
     const note = document.getElementById('condition-note').value.trim();
     const treatment = document.getElementById('treatment-details').value.trim();
+    const cost = parseFloat(document.getElementById('treatment-cost').value) || 0;
     const discharge = document.getElementById('discharge-patient').checked;
-    const billAmount = parseFloat(document.getElementById('bill-amount').value) || 0;
-    
-    console.log(`Treatment data: ${note}, ${treatment}, discharge: ${discharge}, bill: ${billAmount}`);
-    
-    if (!note || !treatment) {
-        showNotification('Error', 'Please fill in all required fields.', 'error');
+
+    console.log(`Treatment data: ${note}, ${treatment}, cost: ${cost}, discharge: ${discharge}`);
+
+    if (!note || !treatment || cost <= 0) {
+        showNotification('Error', 'Please fill in all required fields and enter a valid cost.', 'error');
         return;
     }
-    
-    if (discharge && billAmount <= 0) {
-        showNotification('Error', 'Please enter a valid bill amount for discharge.', 'error');
-        return;
-    }
-    
+
     try {
         const result = await apiRequest('/api/treatment', 'POST', {
             patient_id: patientId,
             note: note,
             treatment: treatment,
-            discharge: discharge,
-            bill_amount: billAmount
+            cost: cost,
+            discharge: discharge
         });
-        
+
         showNotification('Success', result.message, 'success');
         document.getElementById('treatment-form').reset();
         document.getElementById('patient-info').style.display = 'none';
-        document.getElementById('discharge-section').style.display = 'none';
         currentPatient = null;
         loadDashboard();
-        
+
     } catch (error) {
         console.error('Error processing treatment:', error);
     }
