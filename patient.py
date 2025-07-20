@@ -2,6 +2,7 @@ import json
 import os
 import uuid
 from datetime import datetime
+
 class Patient:
     @staticmethod
     def should_admit(symptoms, condition):
@@ -27,6 +28,7 @@ class Patient:
                 if crit_clean in s_clean or s_clean in crit_clean:
                     return True
         return False
+    
     def __init__(self, name, age, gender, symptoms):
         self.id = "PAT-" + str(uuid.uuid4())[:5]
         self.name = name
@@ -38,22 +40,33 @@ class Patient:
         self.history = []
         self.admission = None
         self.discharge_date = None
-        self.bill_amount = 0
+        self.bill_amount = 0.0 
+    
     def add_history(self, notes):
         self.history.append({
             'date': datetime.now().strftime("%Y-%m-%d"),
             'notes': notes
         })
+    
     def admit(self):
         self.admission = datetime.now().strftime("%Y-%m-%d")
         self.status = 'inpatient'
+    
     def discharge(self, bill):
         self.discharge_date = datetime.now().strftime("%Y-%m-%d")
         self.status = 'discharged'
-        self.bill_amount = bill
+        self.bill_amount = float(bill)
+        print(f"Patient {self.name} discharged with bill ₹{self.bill_amount}")
+    
     def set_outpatient(self, notes):
         self.status = 'outpatient'
         self.add_history(notes)
+    
+    def update_bill(self, amount):
+        """Add amount to existing bill"""
+        self.bill_amount += float(amount)
+        print(f"Updated bill for {self.name}: ₹{self.bill_amount}")
+    
     def to_dict(self):
         return {
             "id": self.id,
@@ -66,9 +79,11 @@ class Patient:
             "history": self.history,
             "admission": self.admission,
             "discharge_date": self.discharge_date,
-            "bill_amount": self.bill_amount
+            "bill_amount": float(self.bill_amount) 
         }
+
 patients = {}
+
 def save_patient_to_json(patient):
     file_path = 'patients.json'
     # Load existing data if file exists
@@ -80,11 +95,11 @@ def save_patient_to_json(patient):
                 data = {}
     else:
         data = {}
-    # Add or update the patient record
     data[patient.id] = patient.to_dict()
-    # Save back to file
     with open(file_path, 'w') as f:
         json.dump(data, f, indent=4)
+    print(f"Saved patient {patient.name} with bill ₹{patient.bill_amount}")
+
 def load_patients_from_json():
     file_path = 'patients.json'
     if os.path.exists(file_path):
@@ -94,14 +109,15 @@ def load_patients_from_json():
                 patient = Patient(
                     pinfo['name'], pinfo['age'], pinfo['gender'], pinfo['symptoms']
                 )
-                patient.id = pid  # avoid generating a new ID
+                patient.id = pid
                 patient.assigned_doctor = pinfo.get('assigned_doctor')
                 patient.status = pinfo.get('status')
                 patient.history = pinfo.get('history', [])
                 patient.admission = pinfo.get('admission')
                 patient.discharge_date = pinfo.get('discharge_date')
-                patient.bill_amount = pinfo.get('bill_amount', 0)
+                patient.bill_amount = float(pinfo.get('bill_amount', 0))
                 patients[pid] = patient
+
 def register_patient():
     name = input("Patient Name: ")
     age = input("Age: ")
@@ -116,4 +132,3 @@ def register_patient():
     print(f"Patient registered with ID: {patient.id}")
     save_patient_to_json(patient)
     return patient.id
-# register_patient()

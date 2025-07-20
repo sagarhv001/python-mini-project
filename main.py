@@ -1,6 +1,6 @@
 import os
 import json
-from patient import Patient
+from patient import Patient, register_patient
 from doctor import Doctor
 from utilities import register_doctor, simulate_treatment
 from data_storage import patients, doctors

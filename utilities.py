@@ -27,17 +27,25 @@ def simulate_treatment(patient, doctor):
         return
 
     days = int(input("Enter number of treatment days: "))
+    total_bill = 0
+
     for day in range(1, days + 1):
         print(f"\n--- Day {day} ---")
         note = input("Enter condition update: ")
         treatment = input("Treatment/Test conducted: ")
-        doctor.log_condition(patient.id, f"Day {day}: {note}, Treatment: {treatment}")
-        patient.add_history(f"Day {day}: {note}, Treatment: {treatment}")
+        daily_bill = int(input("Enter bill amount for today: ₹"))
+
+        doctor.log_condition(patient.id, f"Day {day}: {note}, Treatment: {treatment}, Bill: ₹{daily_bill}")
+        patient.add_history(f"Day {day}: {note}, Treatment: {treatment}, Bill: ₹{daily_bill}")
+        
+        total_bill += daily_bill
 
         if input("Discharge patient? (y/n): ").lower() == 'y':
-            bill = int(input("Enter total bill amount: ₹"))
-            doctor.discharge_patient(patient, bill)
+            doctor.discharge_patient(patient, total_bill)
             break
+    else:
+        # If the loop completes without early discharge
+        doctor.discharge_patient(patient, total_bill)
 
     save_patient_to_json(patient)
     save_doctor_to_json(doctor)
