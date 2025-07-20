@@ -27,6 +27,8 @@ def simulate_treatment(patient, doctor):
         return
 
     days = int(input("Enter number of treatment days: "))
+    total_bill = 0
+
     for day in range(1, days + 1):
         print(f"\n--- Day {day} ---")
         note = input("Enter condition update: ")
@@ -40,7 +42,11 @@ def simulate_treatment(patient, doctor):
             total_cost = sum(entry.get('cost', 0) for entry in patient.history)
             doctor.discharge_patient(patient, total_cost)
             print(f"Total bill amount: ₹{total_cost}")
+
             break
+    else:
+        # If the loop completes without early discharge
+        doctor.discharge_patient(patient, total_bill)
 
     save_patient_to_json(patient)
     save_doctor_to_json(doctor)

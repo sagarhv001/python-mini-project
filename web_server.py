@@ -157,8 +157,10 @@ def simulate_treatment():
         patient_id = data.get('patient_id', '').strip()
         note = data.get('note', '').strip()
         treatment = data.get('treatment', '').strip()
+
         cost = float(data.get('cost', 0))
         discharge = data.get('discharge', False)
+
         
         if patient_id not in patients:
             return jsonify({
@@ -189,8 +191,11 @@ def simulate_treatment():
         
         # Add treatment note and cost
         treatment_note = f"{note}, Treatment: {treatment}"
+        if additional_charges > 0:
+            treatment_note += f", Charges: ₹{additional_charges}"
+        
         doctor.log_condition(patient.id, treatment_note)
-        patient.add_history(treatment_note, cost=cost)
+
         # Always update bill_amount and treatment_total_cost
         if not hasattr(patient, 'treatment_total_cost'):
             patient.treatment_total_cost = 0
@@ -199,8 +204,13 @@ def simulate_treatment():
             total_cost = sum(entry.get('cost', 0) for entry in patient.history)
             doctor.discharge_patient(patient, total_cost)
             message = f"Patient {patient.name} discharged with bill ₹{total_cost}"
+
         else:
-            message = f"Treatment recorded for {patient.name}"
+            # For regular treatment, add additional charges to existing bill
+            patient.bill_amount += additional_charges
+            message = f"Treatment recorded for {patient.name}. Updated bill: ₹{patient.bill_amount}"
+        
+        print(f"Updated patient bill: ₹{patient.bill_amount}")  # Debug log
         
         save_patient_to_json(patient)
         save_doctor_to_json(doctor)
@@ -211,6 +221,7 @@ def simulate_treatment():
             'data': patient.to_dict()
         })
     except Exception as e:
+        print(f"Treatment error: {e}")  # Debug log
         return jsonify({
             'success': False,
             'error': str(e)
