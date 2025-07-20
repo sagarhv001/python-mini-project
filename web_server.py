@@ -8,6 +8,9 @@ from patient import Patient
 from doctor import Doctor
 from utilities import assign_doctor_to_patient
 from data_storage import save_patient_to_json, save_doctor_to_json, patients, doctors
+from main import load_patients, load_doctors
+load_patients()
+load_doctors()
 
 app = Flask(__name__, static_folder='static', template_folder='templates')
 CORS(app)
@@ -121,7 +124,7 @@ def register_patient():
         
         doctor = assign_doctor_to_patient(patient)
         
-        if condition == "critical":
+        if Patient.should_admit(patient.symptoms, condition):
             patient.admit()
             status_message = f"{patient.name} admitted as inpatient."
         else:

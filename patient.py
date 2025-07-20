@@ -3,8 +3,32 @@ import os
 import uuid
 from datetime import datetime
 class Patient:
+    @staticmethod
+    def should_admit(symptoms, condition):
+        critical_symptoms = [
+            'abdominal pain',
+            'severe abdominal pain',
+            'abdominal bleeding',
+            'chest pain',
+            'difficulty breathing',
+            'unconscious',
+            'severe bleeding',
+            'heart attack',
+            'stroke',
+            'severe allergic reaction',
+            'severe burns',
+        ]
+        if condition.lower() == 'critical':
+            return True
+        for symptom in symptoms:
+            s_clean = symptom.strip().lower()
+            for crit in critical_symptoms:
+                crit_clean = crit.lower()
+                if crit_clean in s_clean or s_clean in crit_clean:
+                    return True
+        return False
     def __init__(self, name, age, gender, symptoms):
-        self.id = "HOS-" + str(uuid.uuid4())
+        self.id = "PAT-" + str(uuid.uuid4())[:5]
         self.name = name
         self.age = age
         self.gender = gender
@@ -84,31 +108,10 @@ def register_patient():
     gender = input("Gender: ")
     symptoms = input("Symptoms (comma-separated): ").split(',')
     condition = input("Condition: ")
-    
+
     patient = Patient(name, age, gender, symptoms)
-    
-    # List of critical symptoms (including two abdominal ones)
-    critical_symptoms = [
-        'severe abdominal pain',
-        'abdominal bleeding',
-        'chest pain',
-        'difficulty breathing',
-        'unconscious',
-        'severe bleeding',
-        'heart attack',
-        'stroke'
-    ]
-    
-    # Auto-admit if critical condition or critical symptoms
-    if condition.lower() == 'critical':
+    if Patient.should_admit(patient.symptoms, condition):
         patient.admit()
-    else:
-        # Check if any symptom matches critical symptoms
-        for symptom in patient.symptoms:
-            if symptom.strip().lower() in critical_symptoms:
-                patient.admit()
-                break
-    
     patients[patient.id] = patient
     print(f"Patient registered with ID: {patient.id}")
     save_patient_to_json(patient)

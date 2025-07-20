@@ -8,7 +8,7 @@ from datetime import datetime
 # --------------------- DOCTOR CLASS ---------------------
 class Doctor:
     def __init__(self, name, specialization):
-        self.id = "DOC-" + str(uuid.uuid4())
+        self.id = "DOC-" + str(uuid.uuid4())[:5]
         self.name = name
         self.specialization = specialization
         self.patients = []

@@ -2,7 +2,7 @@ import os
 import json
 from patient import Patient
 from doctor import Doctor
-from utilities import register_doctor, register_patient, simulate_treatment
+from utilities import register_doctor, simulate_treatment
 from data_storage import patients, doctors
 def load_patients():
     file_path = 'patients.json'

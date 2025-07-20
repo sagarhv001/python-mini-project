@@ -21,27 +21,6 @@ def assign_doctor_to_patient(patient):
     save_doctor_to_json(doctor)
     return doctor
 
-def register_patient():
-    name = input("Patient Name: ")
-    age = input("Age: ")
-    gender = input("Gender: ")
-    symptoms = input("Symptoms (comma-separated): ").split(',')
-    condition = input("Initial Condition: ").lower()
-
-    patient = Patient(name, age, gender, symptoms)
-    patients[patient.id] = patient
-    doctor = assign_doctor_to_patient(patient)
-
-    if condition == "critical":
-        patient.admit()
-        print(f"{patient.name} admitted as inpatient.")
-    else:
-        patient.set_outpatient(f"Outpatient advice by {doctor.name}")
-
-    save_patient_to_json(patient)
-    print(f"Patient registered with ID: {patient.id}")
-    return patient, doctor
-
 def simulate_treatment(patient, doctor):
     if patient.status != 'inpatient':
         print("Patient is not admitted. No treatment simulation needed.")
