@@ -15,7 +15,7 @@ app = Flask(__name__, static_folder='static', template_folder='templates')
 CORS(app)
 
 
-# --------------------- FLASK ROUTES ---------------------
+# FLASK ROUTES
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -160,7 +160,8 @@ def simulate_treatment():
         cost = float(data.get('cost', 0))
         discharge = data.get('discharge', False)
         
-
+        print(f"Treatment request: {data}")  # Debug log
+        
         if patient_id not in patients:
             return jsonify({
                 'success': False,
