@@ -4,22 +4,7 @@
         "name": "Dr. Alice Smith",
         "specialization": "Cardiology",
         "patients": [],
-        "notes": {
-            "PAT-744e4": [
-                {
-                    "date": "2025-07-21",
-                    "note": "Stable",
-                    "treatment": "blood work",
-                    "cost": 1000.0
-                },
-                {
-                    "date": "2025-07-21",
-                    "note": "normal",
-                    "treatment": "n/a",
-                    "cost": 50.0
-                }
-            ]
-        }
+        "notes": {}
     },
     "DOC-456": {
         "id": "DOC-456",
@@ -33,20 +18,23 @@
         "name": "Dr. Cathy Patel",
         "specialization": "Neurology",
         "patients": [],
-        "notes": {}
+        "notes": {
+        }
     },
-    "DOC-40eae917-4ada-4511-acc9-c0b1a2a57179": {
-        "id": "DOC-40eae917-4ada-4511-acc9-c0b1a2a57179",
+    "DOC-401": {
+        "id": "DOC-401",
         "name": "Dr. Xavier",
         "specialization": "Cardiology",
         "patients": [],
         "notes": {}
     },
-    "DOC-6267b162-219e-4159-83b4-895dbd2b7686": {
-        "id": "DOC-6267b162-219e-4159-83b4-895dbd2b7686",
+    "DOC-626": {
+        "id": "DOC-626",
         "name": "Dr. Zhang",
         "specialization": "General Medicine",
-        "patients": [],
+        "patients": [
+            
+        ],
         "notes": {}
     }
 }

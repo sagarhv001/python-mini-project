@@ -77,7 +77,8 @@ def main():
         print("4. List All Patients")
         print("5. Simulate Treatment for Inpatient")
         print("6. Show Patient History & Bill")
-        print("7. Exit")
+        print("7. Mark Doctor On Leave & Reassign Patients")
+        print("8. Exit")
         choice = input("Enter choice: ")
 
         if choice == '1':
@@ -95,6 +96,7 @@ def main():
                 save_patient_to_json(patient)  # Persist assigned_doctor
             else:
                 print("No doctor assigned.")
+        elif choice == '3':
             print("\n--- Doctors List ---")
             for d in doctors.values():
                 print(f"{d.id}: {d.name} ({d.specialization}), Patients: {len(d.patients)}")
@@ -176,6 +178,18 @@ def main():
             else:
                 print("Patient not found.")
         elif choice == '7':
+            # Mark doctor on leave and reassign patients
+            print("\n--- Doctors List ---")
+            for d in doctors.values():
+                print(f"{d.id}: {d.name} ({d.specialization}), Patients: {len(d.patients)}")
+            did = input("Enter Doctor ID to mark as on leave: ").strip()
+            doctor = doctors.get(did)
+            if not doctor:
+                print("Doctor not found.")
+                return
+            from utilities import mark_doctor_on_leave
+            mark_doctor_on_leave(doctor)
+        elif choice == '8':
             break
         else:
             print("Invalid choice.")
