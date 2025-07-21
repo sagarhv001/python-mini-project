@@ -4,15 +4,18 @@ from patient import Patient, register_patient
 from doctor import Doctor
 from utilities import register_doctor, simulate_treatment
 from data_storage import patients, doctors
-def load_patients():
-    file_path = 'patients.json'
-    if os.path.exists(file_path):
-        with open(file_path, 'r') as f:
+
+def load_json_with_backup(primary_path, backup_path):
+    """
+    Try to load JSON data from primary file.
+    If it fails, try to load from backup file.
+    """
+    data = {}
+    if os.path.exists(primary_path):
+        with open(primary_path, 'r') as f:
             try:
                 txt = f.read().strip()
-                if not txt:
-                    data = {}
-                else:
+                if txt:
                     data = json.loads(txt)
             except Exception:
                 data = {}
@@ -42,29 +45,60 @@ def load_patients():
                 patient.bill_amount = pinfo.get('bill_amount', 0)
                 patient.treatment_total_cost = pinfo.get('treatment_total_cost', 0)
                 patients[pid] = patient
+            else:
+                print(f"{primary_path} is empty, trying backup...")
+                data = load_backup(backup_path)
+            # except json.JSONDecodeError as e:
+            #     print(f"Failed to load {primary_path}: {e}, trying backup...")
+            #     data = load_backup(backup_path)
+    else:
+        print(f"{primary_path} not found, trying backup...")
+        data = load_backup(backup_path)
+    return data
+
+def load_backup(backup_path):
+    if os.path.exists(backup_path):
+        with open(backup_path, 'r') as f:
+            try:
+                txt = f.read().strip()
+                if txt:
+                    print(f"Loaded data from backup: {backup_path}")
+                    return json.loads(txt)
+            except json.JSONDecodeError as e:
+                print(f"Failed to load backup {backup_path}: {e}")
+    return {}
+
+def load_patients():
+    file_path = 'patients.json'
+    backup_path = 'patients_backup.json'
+    data = load_json_with_backup(file_path, backup_path)
+
+    for pid, pinfo in data.items():
+        patient = Patient(
+            pinfo['name'], pinfo['age'], pinfo['gender'], pinfo['symptoms']
+        )
+        patient.id = pid
+        patient.assigned_doctor = pinfo.get('assigned_doctor')
+        patient.status = pinfo.get('status')
+        patient.history = pinfo.get('history', [])
+        patient.admission = pinfo.get('admission')
+        patient.discharge_date = pinfo.get('discharge_date')
+        patient.bill_amount = pinfo.get('bill_amount', 0)
+        patients[pid] = patient
 
 def load_doctors():
     file_path = 'doctors.json'
-    if os.path.exists(file_path):
-        with open(file_path, 'r') as f:
-            try:
-                txt = f.read().strip()
-                if not txt:
-                    data = {}
-                else:
-                    data = json.loads(txt)
-            except Exception:
-                data = {}
-            for did, dinfo in data.items():
-                doctor = Doctor(
-                    dinfo['name'], dinfo['specialization']
-                )
-                doctor.id = did
-                doctor.patients = dinfo.get('patients', [])
-                doctor.notes = dinfo.get('notes', {})
-                doctors[did] = doctor
+    backup_path = 'doctors_backup.json'
+    data = load_json_with_backup(file_path, backup_path)
 
-
+    for did, dinfo in data.items():
+        doctor = Doctor(
+            dinfo['name'], dinfo['specialization']
+        )
+        doctor.id = did
+        doctor.patients = dinfo.get('patients', [])
+        doctor.notes = dinfo.get('notes', {})
+        doctors[did] = doctor
 
 def main():
     load_doctors()
@@ -163,9 +197,10 @@ def main():
             from utilities import mark_doctor_on_leave
             mark_doctor_on_leave(doctor)
         elif choice == '8':
+            print("Goodbye!")
             break
         else:
             print("Invalid choice.")
 
 if __name__ == "__main__":
-    main()
+    main() 

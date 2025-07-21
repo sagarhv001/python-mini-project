@@ -2,7 +2,7 @@
 let symptoms = [];
 let currentPatient = null;
 
-// DOM Content Loaded
+// DOM Loaded
 document.addEventListener('DOMContentLoaded', function() {
     console.log('DOM loaded, initializing app...');
     // Initialize the application
