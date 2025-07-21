@@ -91,7 +91,6 @@ def main():
             from utilities import assign_doctor_to_patient
             doctor = assign_doctor_to_patient(patient)
             if doctor:
-                print(f"Doctor {doctor.name} assigned to patient {patient.name}.")
                 from data_storage import save_patient_to_json
                 save_patient_to_json(patient)  # Persist assigned_doctor
             else:
@@ -108,47 +107,23 @@ def main():
             if not patients:
                 print("No patients available.")
                 continue
-            print("\nAvailable Inpatients with Assigned Doctor:")
             valid_patients = [p for p in patients.values() if p.status == 'inpatient' and p.assigned_doctor]
             if not valid_patients:
                 print("No inpatients with assigned doctor available for treatment simulation.")
                 continue
-            for p in valid_patients:
-                print(f"{p.id}: {p.name} (Doctor: {p.assigned_doctor})")
-            pid = input("Enter Patient ID: ").strip()
-            if pid not in patients:
-                print("Patient not found. Please check the ID and try again.")
-                continue
-            patient = patients[pid]
-            if not patient.assigned_doctor:
-                print(f"Patient {patient.name} does not have an assigned doctor.")
-                assign = input("Assign a doctor now? (y/n): ").lower()
-                if assign == 'y':
-                    from utilities import assign_doctor_to_patient
-                    doctor = assign_doctor_to_patient(patient)
-                    if doctor:
-                        print(f"Assigned to Dr. {doctor.name} ({doctor.specialization})")
-                    else:
-                        print("No doctor assigned. Cannot proceed.")
-                        continue
-                else:
-                    print("Cannot simulate treatment without a doctor.")
+            print(f"\nSimulating treatment for {len(valid_patients)} inpatients:")
+            for patient in valid_patients:
+                print(f"\n--- {patient.name} (ID: {patient.id}) | Doctor: {patient.assigned_doctor} ---")
+                doctor = next((d for d in doctors.values() if d.name == patient.assigned_doctor), None)
+                if not doctor:
+                    print(f"Assigned doctor {patient.assigned_doctor} not found. Skipping patient.")
                     continue
-            doctor = next((d for d in doctors.values() if d.name == patient.assigned_doctor), None)
-            if not doctor:
-                print("Assigned doctor not found.")
-                continue
-            if patient.status != 'inpatient':
-                print("Patient is not admitted (inpatient). Cannot simulate treatment.")
-                continue
-            while True:
-                print(f"\nSimulating treatment for {patient.name} (ID: {patient.id})")
                 note = input("Enter condition update: ")
                 treatment = input("Treatment/Test conducted: ")
                 try:
                     cost = float(input("Enter cost for this treatment/test: ₹"))
                 except ValueError:
-                    print("Invalid cost. Try again.")
+                    print("Invalid cost. Skipping patient.")
                     continue
                 doctor.log_condition(patient.id, note, treatment, cost)
                 patient.add_history(f"{note}, Treatment: {treatment}", cost=cost)
@@ -163,9 +138,7 @@ def main():
                     save_patient_to_json(patient)
                     save_doctor_to_json(doctor)
                     print(f"Patient discharged. Final bill: ₹{patient.bill_amount}")
-                    break
-                else:
-                    continue
+            print("\nAll inpatients have had their treatments updated.")
         elif choice == '6':
             pid = input("Enter Patient ID: ")
             if pid in patients:

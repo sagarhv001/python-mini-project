@@ -1,51 +1,19 @@
 {
-    "PAT-5a896": {
-        "id": "PAT-5a896",
-        "name": "Harshith M S",
-        "age": 21,
-        "gender": "Male",
+    "PAT-9a190": {
+        "id": "PAT-9a190",
+        "name": "y",
+        "age": 22,
+        "gender": "Female",
         "symptoms": [
-            "abdominal pain",
-            "unconscious"
+            "Chest Pain",
+            "Unconscious"
         ],
-        "assigned_doctor": "Dr. Zhang",
+        "assigned_doctor": "Dr. Xavier",
         "status": "inpatient",
         "history": [],
         "admission": "2025-07-21",
         "discharge_date": null,
         "treatment_total_cost": 0,
         "bill_amount": 0.0
-    },
-    "PAT-9b254": {
-        "id": "PAT-9b254",
-        "name": "y",
-        "age": 22,
-        "gender": "Female",
-        "symptoms": [
-            "unconscious"
-        ],
-        "assigned_doctor": "Dr. Cathy Patel",
-        "status": "discharged",
-        "history": [
-            {
-                "date": "2025-07-21",
-                "notes": "stable, Treatment: MRI",
-                "cost": 2500.0
-            },
-            {
-                "date": "2025-07-21",
-                "notes": "stable, Treatment: CT scan",
-                "cost": 1000.0
-            },
-            {
-                "date": "2025-07-21",
-                "notes": "stable, Treatment: nonsense",
-                "cost": 50.0
-            }
-        ],
-        "admission": "2025-07-21",
-        "discharge_date": "2025-07-21",
-        "treatment_total_cost": 3550.0,
-        "bill_amount": 3550.0
     }
 }
