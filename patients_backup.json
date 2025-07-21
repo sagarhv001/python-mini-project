@@ -30,21 +30,6 @@
         "discharge_date": null,
         "treatment_total_cost": 3010.0,
         "bill_amount": 3010.0
-    },
-    "PAT-85c5d": {
-        "id": "PAT-85c5d",
-        "name": "Jane Roe",
-        "age": 40,
-        "gender": "Female",
-        "symptoms": [
-            "stroke"
-        ],
-        "assigned_doctor": "Dr. B",
-        "status": "registered",
-        "history": [],
-        "admission": null,
-        "discharge_date": null,
-        "treatment_total_cost": 0,
-        "bill_amount": 0.0
     }
-}
+
+ }

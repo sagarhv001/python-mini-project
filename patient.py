@@ -97,41 +97,8 @@ class Patient:
             "treatment_total_cost": getattr(self, 'treatment_total_cost', 0),
             "bill_amount": float(self.bill_amount)
         }
-patients = {}
 
-def save_patient_to_json(patient):
-    file_path = 'patients.json'
-    # Load existing data if file exists
-    if os.path.exists(file_path):
-        with open(file_path, 'r') as f:
-            try:
-                data = json.load(f)
-            except json.JSONDecodeError:
-                data = {}
-    else:
-        data = {}
-    data[patient.id] = patient.to_dict()
-    with open(file_path, 'w') as f:
-        json.dump(data, f, indent=4)
-    print(f"Saved patient {patient.name} with bill ₹{patient.bill_amount}")
-
-def load_patients_from_json():
-    file_path = 'patients.json'
-    if os.path.exists(file_path):
-        with open(file_path, 'r') as f:
-            data = json.load(f)
-            for pid, pinfo in data.items():
-                patient = Patient(
-                    pinfo['name'], pinfo['age'], pinfo['gender'], pinfo['symptoms']
-                )
-                patient.id = pid
-                patient.assigned_doctor = pinfo.get('assigned_doctor')
-                patient.status = pinfo.get('status')
-                patient.history = pinfo.get('history', [])
-                patient.admission = pinfo.get('admission')
-                patient.discharge_date = pinfo.get('discharge_date')
-                patient.bill_amount = float(pinfo.get('bill_amount', 0))
-                patients[pid] = patient
+from data_storage import save_patient_to_json
 
 def register_patient():
     name = input("Patient Name: ")
@@ -143,6 +110,7 @@ def register_patient():
     patient = Patient(name, age, gender, symptoms)
     if Patient.should_admit(patient.symptoms, condition):
         patient.admit()
+    from data_storage import patients  # ensure correct patients dict
     patients[patient.id] = patient
     print(f"Patient registered with ID: {patient.id}")
     save_patient_to_json(patient)

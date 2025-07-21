@@ -1,3 +1,4 @@
+import sys
 import os
 import json
 from patient import Patient, register_patient
@@ -5,56 +6,33 @@ from doctor import Doctor
 from utilities import register_doctor, simulate_treatment
 from data_storage import patients, doctors
 
+
 def load_json_with_backup(primary_path, backup_path):
     """
     Try to load JSON data from primary file.
     If it fails, try to load from backup file.
     """
     data = {}
+    abs_path = os.path.abspath(primary_path)
+    
     if os.path.exists(primary_path):
         with open(primary_path, 'r') as f:
             try:
                 txt = f.read().strip()
+               
                 if txt:
                     data = json.loads(txt)
-            except Exception:
-                data = {}
-            for pid, pinfo in data.items():
-                # Handle age as int or string
-                age = pinfo.get('age', '')
-                try:
-                    age = int(age)
-                except (ValueError, TypeError):
-                    pass
-                # Handle symptoms as list
-                symptoms = pinfo.get('symptoms', [])
-                if not isinstance(symptoms, list):
-                    symptoms = [symptoms]
-                patient = Patient(
-                    pinfo.get('name', ''),
-                    age,
-                    pinfo.get('gender', ''),
-                    symptoms
-                )
-                patient.id = pid
-                patient.assigned_doctor = pinfo.get('assigned_doctor', None)
-                patient.status = pinfo.get('status', 'registered')
-                patient.history = pinfo.get('history', [])
-                patient.admission = pinfo.get('admission', None)
-                patient.discharge_date = pinfo.get('discharge_date', None)
-                patient.bill_amount = pinfo.get('bill_amount', 0)
-                patient.treatment_total_cost = pinfo.get('treatment_total_cost', 0)
-                patients[pid] = patient
-            else:
-                print(f"{primary_path} is empty, trying backup...")
-                data = load_backup(backup_path)
-            # except json.JSONDecodeError as e:
-            #     print(f"Failed to load {primary_path}: {e}, trying backup...")
-            #     data = load_backup(backup_path)
+                   
+                else:
+                   
+                    return load_backup(backup_path)
+            except Exception as e:
+               
+                return load_backup(backup_path)
+        return data
     else:
-        print(f"{primary_path} not found, trying backup...")
-        data = load_backup(backup_path)
-    return data
+        
+        return load_backup(backup_path)
 
 def load_backup(backup_path):
     if os.path.exists(backup_path):
@@ -101,8 +79,11 @@ def load_doctors():
         doctors[did] = doctor
 
 def main():
+    
     load_doctors()
+  
     load_patients()
+    
     print("=== Patient Tracking System ===")
     while True:
         print("\n1. Register Doctor")
@@ -203,4 +184,9 @@ def main():
             print("Invalid choice.")
 
 if __name__ == "__main__":
-    main() 
+    try:
+        main()
+    except Exception as e:
+        import traceback
+        print("[FATAL ERROR] Exception in main():", e)
+        traceback.print_exc()

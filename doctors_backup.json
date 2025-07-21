@@ -3,83 +3,89 @@
         "id": "DOC-123",
         "name": "Dr. Alice Smith",
         "specialization": "Cardiology",
-        "patients": [
-            "PAT-c446a",
-            "PAT-b4bf1"
-        ],
-        "notes": {
-            "PAT-b4bf1": [
-                {
-                    "date": "2025-07-20",
-                    "note": "stable, Treatment: Angiogram"
-                },
-                {
-                    "date": "2025-07-20",
-                    "note": "stable, Treatment: Physical test"
-                },
-                {
-                    "date": "2025-07-20",
-                    "note": "normal, Treatment: none"
-                }
-            ]
-        }
+        "patients": [],
+        "notes": {}
     },
     "DOC-456": {
         "id": "DOC-456",
         "name": "Dr. Bob Lee",
         "specialization": "General Medicine",
-        "patients": [
-            "PAT-860f7"
-        ],
+        "patients": [],
         "notes": {}
     },
     "DOC-789": {
         "id": "DOC-789",
         "name": "Dr. Cathy Patel",
         "specialization": "Neurology",
-        "patients": [
-            "PAT-06aa7"
-        ],
-        "notes": {}
+        "patients": [],
+        "notes": {
+            "PAT-a8ea0": [
+                {
+                    "date": "2025-07-21",
+                    "note": "Stable",
+                    "treatment": "MRI",
+                    "cost": 2000.0
+                },
+                {
+                    "date": "2025-07-21",
+                    "note": "Stable",
+                    "treatment": "CT scan",
+                    "cost": 1000.0
+                }
+            ]
+        }
     },
-    "DOC-40eae917-4ada-4511-acc9-c0b1a2a57179": {
-        "id": "DOC-112",
+    "DOC-401": {
+        "id": "DOC-401",
         "name": "Dr. Xavier",
         "specialization": "Cardiology",
-        "patients": [
-            "PAT-816df"
-        ],
+        "patients": [],
         "notes": {}
     },
-    "DOC-6267b162-219e-4159-83b4-895dbd2b7686": {
-        "id": "DOC-6267b162-219e-4159-83b4-895dbd2b7686",
+    "DOC-626": {
+        "id": "DOC-626",
         "name": "Dr. Zhang",
         "specialization": "General Medicine",
+        "patients": [],
+        "notes": {}
+    },
+    "DOC-f2876": {
+        "id": "DOC-f2876",
+        "name": "dev",
+        "specialization": "Cardiology",
+        "patients": [],
+        "notes": {}
+    },
+    "DOC-d468c": {
+        "id": "DOC-d468c",
+        "name": "Dr. Bob Ficsher",
+        "specialization": "Neurology",
+        "patients": [],
+        "notes": {
+            "PAT-a8ea0": [
+                {
+                    "date": "2025-07-21",
+                    "note": "Normal",
+                    "treatment": "N/A",
+                    "cost": 10.0
+                }
+            ]
+        }
+    },
+    "DOC-846ea": {
+        "id": "DOC-846ea",
+        "name": "Dr. B",
+        "specialization": "Neurology",
         "patients": [
-            "PAT-ae7ff"
+            "PAT-85c5d"
         ],
         "notes": {}
     },
-    "DOC-9be88": {
-        "id": "DOC-9be88",
-        "name": "doej",
-        "specialization": "kendkn",
-        "patients": [],
-        "notes": {}
-    },
-    "DOC-35c47": {
-        "id": "DOC-35c47",
-        "name": "jnfne",
-        "specialization": "osjnd",
-        "patients": [],
-        "notes": {}
-    },
-    "DOC-d64af": {
-        "id": "DOC-d64af",
-        "name": "sharath",
-        "specialization": "chemo theraphiest",
+    "DOC-934f1": {
+        "id": "DOC-934f1",
+        "name": "Dr. A",
+        "specialization": "Neurology",
         "patients": [],
         "notes": {}
     }
-
 }

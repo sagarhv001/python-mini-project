@@ -17,7 +17,7 @@ class Doctor:
         if patient.id not in self.patients:
             self.patients.append(patient.id)
             patient.assigned_doctor = self.name
-            print(f"Patient {patient.name} assigned to Dr. {self.name}")
+            print(f"Patient {patient.name} assigned to {self.name}")
 
     def log_condition(self, patient_id, note, treatment=None, cost=0):
         today = datetime.now().strftime("%Y-%m-%d")

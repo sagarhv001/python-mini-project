@@ -1,52 +1,23 @@
 import unittest
 import os
 import json
-import logging
-from patient import Patient, save_patient_to_json, load_patients_from_json, patients
+from patient import Patient
+from doctor import Doctor
+from data_storage import save_patient_to_json, save_doctor_to_json, patients, doctors
+from utilities import assign_doctor_to_patient, mark_doctor_on_leave
 
-# Configure logging to both file and terminal
-INTEGRATION_LOG_FILE = "integration_test_log.txt"
-logger = logging.getLogger()
-logger.setLevel(logging.INFO)
-
-# Remove any old handlers
-for handler in logger.handlers[:]:
-    logger.removeHandler(handler)
-
-# File Handler
-file_handler = logging.FileHandler(INTEGRATION_LOG_FILE, mode='w')
-file_handler.setFormatter(logging.Formatter("%(asctime)s [%(levelname)s] %(message)s"))
-
-# Console Handler
-console_handler = logging.StreamHandler()
-console_handler.setFormatter(logging.Formatter("[%(levelname)s] %(message)s"))
-
-# Add handlers
-logger.addHandler(file_handler)
-logger.addHandler(console_handler)
-
-class TestPatientIntegration(unittest.TestCase):
-
-    @classmethod
-    def setUpClass(cls):
-        logging.info("=" * 50)
-        logging.info("Starting Test Module: %s", cls.__name__)
-        logging.info("=" * 50)
-        cls.test_file = "integration_test_patients.json"
-
-    @classmethod
-    def tearDownClass(cls):
-        logging.info("=" * 50)
-        logging.info("Finishing Test Module: %s", cls.__name__)
-        logging.info("=" * 50)
-
+class TestIntegration(unittest.TestCase):
     def setUp(self):
         patients.clear()
-        self._orig_save_patient_to_json = save_patient_to_json
-
+        doctors.clear()
+        for fname in ["test_patients.json", "test_doctors.json"]:
+            if os.path.exists(fname):
+                os.remove(fname)
+        # Patch save functions to use test files
         def _save_patient_to_json(patient):
-            if os.path.exists(self.test_file):
-                with open(self.test_file, 'r') as f:
+            fname = "test_patients.json"
+            if os.path.exists(fname):
+                with open(fname, "r") as f:
                     try:
                         data = json.load(f)
                     except json.JSONDecodeError:
@@ -54,103 +25,138 @@ class TestPatientIntegration(unittest.TestCase):
             else:
                 data = {}
             data[patient.id] = patient.to_dict()
-            with open(self.test_file, 'w') as f:
+            with open(fname, "w") as f:
                 json.dump(data, f, indent=4)
-
+        def _save_doctor_to_json(doctor):
+            fname = "test_doctors.json"
+            if os.path.exists(fname):
+                with open(fname, "r") as f:
+                    try:
+                        data = json.load(f)
+                    except json.JSONDecodeError:
+                        data = {}
+            else:
+                data = {}
+            data[doctor.id] = doctor.to_dict()
+            with open(fname, "w") as f:
+                json.dump(data, f, indent=4)
         globals()['save_patient_to_json'] = _save_patient_to_json
-        logging.info("Setting up test case: %s", self._testMethodName)
+        globals()['save_doctor_to_json'] = _save_doctor_to_json
 
     def tearDown(self):
-        if os.path.exists(self.test_file):
-            os.remove(self.test_file)
-        globals()['save_patient_to_json'] = self._orig_save_patient_to_json
+        for fname in ["test_patients.json", "test_doctors.json"]:
+            if os.path.exists(fname):
+                os.remove(fname)
         patients.clear()
-        logging.info("Tearing down test case: %s", self._testMethodName)
+        doctors.clear()
 
-    def run(self, result=None):
-        test_name = self._testMethodName
-        logging.info("---- Running test: %s ----", test_name)
-        try:
-            super().run(result)
-            if result and hasattr(result, 'failures') and any(test_name in str(item[0]) for item in result.failures):
-                logging.error("Test FAILED: %s", test_name)
-            elif result and hasattr(result, 'errors') and any(test_name in str(item[0]) for item in result.errors):
-                logging.error("Test ERROR: %s", test_name)
-            else:
-                logging.info("Test PASSED: %s", test_name)
-        except Exception as e:
-            logging.exception("Test ERRORED: %s (%s)", test_name, e)
-        logging.info("----------------------------")
-#Register, admit, add history
-    def test_register_and_admit_patient(self):
-        p = Patient("Grace", 36, "Female", ["dizziness"])
-        save_patient_to_json(p)
-        p.admit()
-        p.add_history("Initial tests performed")
-        save_patient_to_json(p)
-        with open(self.test_file, 'r') as f:
-            data = json.load(f)
-        self.assertEqual(data[p.id]['status'], 'inpatient')
-        self.assertEqual(len(data[p.id]['history']), 1)
-        self.assertIn("Initial tests performed", data[p.id]['history'][0]['notes'])
-#Full lifecycle: register → admit → discharge
     def test_full_patient_lifecycle(self):
-        p = Patient("Henry", 50, "Male", ["fracture"])
-        save_patient_to_json(p)
-        p.admit()
-        p.add_history("X-ray done")
-        p.discharge(2500)
-        save_patient_to_json(p)
-        with open(self.test_file, 'r') as f:
-            data = json.load(f)
-        self.assertEqual(data[p.id]['status'], 'discharged')
-        self.assertEqual(data[p.id]['bill_amount'], 2500)
-        self.assertIsNotNone(data[p.id]['discharge_date'])
-        self.assertEqual(len(data[p.id]['history']), 1)
-        self.assertIn("X-ray done", data[p.id]['history'][0]['notes'])
-#Outpatient converted to inpatient
-    def test_outpatient_then_admit(self):
-        p = Patient("Ivy", 29, "Female", ["migraine"])
-        p.set_outpatient("Prescribed medication")
-        save_patient_to_json(p)
-        p.admit()
-        p.add_history("Admitted for observation")
-        save_patient_to_json(p)
-        with open(self.test_file, 'r') as f:
-            data = json.load(f)
-        self.assertEqual(data[p.id]['status'], 'inpatient')
-        self.assertEqual(len(data[p.id]['history']), 2)
-        self.assertIn("Prescribed medication", data[p.id]['history'][0]['notes'])
-        self.assertIn("Admitted for observation", data[p.id]['history'][1]['notes'])
-#Saving multiple patients
-    def test_multiple_patients_json(self):
-        p1 = Patient("Jack", 40, "Male", ["cough"])
-        p2 = Patient("Kate", 34, "Female", ["fever"])
-        save_patient_to_json(p1)
-        save_patient_to_json(p2)
-        with open(self.test_file, 'r') as f:
-            data = json.load(f)
-        self.assertIn(p1.id, data)
-        self.assertIn(p2.id, data)
-        self.assertEqual(data[p1.id]['name'], "Jack")
-        self.assertEqual(data[p2.id]['name'], "Kate")
-#Loading from JSON manually
-    def test_load_patients_from_json(self):
-        p = Patient("Liam", 55, "Male", ["hypertension"])
-        save_patient_to_json(p)
-        with open(self.test_file, 'r') as f:
-            data = json.load(f)
-        loaded = {}
-        for pid, pinfo in data.items():
-            patient = Patient(
-                pinfo['name'], pinfo['age'], pinfo['gender'], pinfo['symptoms']
-            )
-            patient.id = pid
-            patient.status = pinfo.get('status')
-            loaded[pid] = patient
-        self.assertIn(p.id, loaded)
-        self.assertEqual(loaded[p.id].name, "Liam")
-        self.assertEqual(loaded[p.id].symptoms, ["hypertension"])
+        # Register doctor and patient, assign, admit, treat, discharge
+        doc = Doctor("Dr. Smith", "Cardiology")
+        doctors[doc.id] = doc
+        save_doctor_to_json(doc)
 
-if __name__ == '__main__':
+        pat = Patient("John Doe", 55, "Male", ["chest pain"])
+        patients[pat.id] = pat
+        save_patient_to_json(pat)
+
+        # Assign doctor based on symptoms
+        assigned = assign_doctor_to_patient(pat)
+        # Patch save functions to use test files
+        def _save_patient_to_json(patient):
+            fname = "test_patients.json"
+            if os.path.exists(fname):
+                with open(fname, "r") as f:
+                    try:
+                        data = json.load(f)
+                    except json.JSONDecodeError:
+                        data = {}
+            else:
+                data = {}
+            data[patient.id] = patient.to_dict()
+            with open(fname, "w") as f:
+                json.dump(data, f, indent=4)
+        def _save_doctor_to_json(doctor):
+            fname = "test_doctors.json"
+            if os.path.exists(fname):
+                with open(fname, "r") as f:
+                    try:
+                        data = json.load(f)
+                    except json.JSONDecodeError:
+                        data = {}
+            else:
+                data = {}
+            data[doctor.id] = doctor.to_dict()
+            with open(fname, "w") as f:
+                json.dump(data, f, indent=4)
+        globals()['save_patient_to_json'] = _save_patient_to_json
+        globals()['save_doctor_to_json'] = _save_doctor_to_json
+
+        save_doctor_to_json(doc)
+
+        self.assertEqual(assigned.specialization, "Cardiology")
+        self.assertEqual(pat.assigned_doctor, doc.name)
+        save_patient_to_json(pat)
+        # Admit and treat patient
+        pat.admit()
+        pat.add_history("ECG performed", cost=500)
+        save_patient_to_json(pat)
+        doc.log_condition(pat.id, "Stable", "ECG", 500)
+        save_doctor_to_json(doc)
+
+        # Discharge patient
+        doc.discharge_patient(pat, 1200)
+        save_patient_to_json(pat)
+        save_doctor_to_json(doc)
+        self.assertEqual(pat.status, "discharged")
+        self.assertEqual(pat.bill_amount, 1200)
+        self.assertNotIn(pat.id, doc.patients)
+
+    def test_doctor_on_leave_and_reassignment(self):
+        # Register two doctors and a patient
+        doc1 = Doctor("Dr. A", "Neurology")
+        doc2 = Doctor("Dr. B", "Neurology")
+        doctors[doc1.id] = doc1
+        doctors[doc2.id] = doc2
+        save_doctor_to_json(doc1)
+        save_doctor_to_json(doc2)
+
+        pat = Patient("Jane Roe", 40, "Female", ["stroke"])
+        patients[pat.id] = pat
+        save_patient_to_json(pat)
+        save_doctor_to_json(doc1)
+        save_doctor_to_json(doc2)
+        doc1.assign_patient(pat)
+        pat.assigned_doctor = doc1.name
+        save_patient_to_json(pat)
+        save_doctor_to_json(doc1)
+
+        # Mark doc1 on leave and reassign
+        mark_doctor_on_leave(doc1)
+        self.assertTrue(getattr(doc1, 'on_leave', False))
+        self.assertNotIn(pat.id, doc1.patients)
+        self.assertIn(pat.id, doc2.patients)
+        self.assertEqual(pat.assigned_doctor, doc2.name)
+
+    def test_json_persistence(self):
+        # Register and save doctor/patient, reload from file
+        doc = Doctor("Dr. Persist", "General")
+        doctors[doc.id] = doc
+        save_doctor_to_json(doc)
+
+        pat = Patient("Persist Patient", 60, "Male", ["fever"])
+        patients[pat.id] = pat
+        save_patient_to_json(pat)
+
+        # Clear in-memory dicts and reload from file
+        patients.clear()
+        doctors.clear()
+        with open("test_patients.json", "r") as f:
+            data = json.load(f)
+        with open("test_doctors.json", "r") as f:
+            doc_data = json.load(f)
+        self.assertIn(pat.id, data)
+        self.assertIn(doc.id, doc_data)
+
+if __name__ == "__main__":
     unittest.main()

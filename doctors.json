@@ -18,15 +18,28 @@
         "name": "Dr. Cathy Patel",
         "specialization": "Neurology",
         "patients": [],
-        "notes": {}
+        "notes": {
+            "PAT-a8ea0": [
+                {
+                    "date": "2025-07-21",
+                    "note": "Stable",
+                    "treatment": "MRI",
+                    "cost": 2000.0
+                },
+                {
+                    "date": "2025-07-21",
+                    "note": "Stable",
+                    "treatment": "CT scan",
+                    "cost": 1000.0
+                }
+            ]
+        }
     },
     "DOC-401": {
         "id": "DOC-401",
         "name": "Dr. Xavier",
         "specialization": "Cardiology",
-        "patients": [
-            "PAT-9a190"
-        ],
+        "patients": [],
         "notes": {}
     },
     "DOC-626": {
@@ -41,6 +54,47 @@
         "name": "dev",
         "specialization": "Cardiology",
         "patients": [],
+        "notes": {}
+    },
+    "DOC-d468c": {
+        "id": "DOC-d468c",
+        "name": "Dr. Bob Ficsher",
+        "specialization": "Neurology",
+        "patients": [],
+        "notes": {
+            "PAT-a8ea0": [
+                {
+                    "date": "2025-07-21",
+                    "note": "Normal",
+                    "treatment": "N/A",
+                    "cost": 10.0
+                }
+            ]
+        }
+    },
+    "DOC-846ea": {
+        "id": "DOC-846ea",
+        "name": "Dr. B",
+        "specialization": "Neurology",
+        "patients": [
+            "PAT-85c5d"
+        ],
+        "notes": {}
+    },
+    "DOC-934f1": {
+        "id": "DOC-934f1",
+        "name": "Dr. A",
+        "specialization": "Neurology",
+        "patients": [],
+        "notes": {}
+    },
+    "DOC-5c202": {
+        "id": "DOC-5c202",
+        "name": "Dr. Smith",
+        "specialization": "Cardiology",
+        "patients": [
+            "PAT-0bcfe"
+        ],
         "notes": {}
     }
 }
