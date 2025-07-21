@@ -6,19 +6,19 @@ from datetime import datetime
 class Patient:
     @staticmethod
     def should_admit(symptoms, condition):
-        critical_symptoms = [
-            'abdominal pain',
-            'severe abdominal pain',
-            'abdominal bleeding',
-            'chest pain',
-            'difficulty breathing',
-            'unconscious',
-            'severe bleeding',
-            'heart attack',
-            'stroke',
-            'severe allergic reaction',
-            'severe burns',
-        ]
+        critical_symptoms = {
+    'abdominal pain': 'Gastroenterology',
+    'severe abdominal pain': 'Gastroenterology',
+    'abdominal bleeding': 'Gastroenterology',
+    'chest pain': 'Cardiology',
+    'difficulty breathing': 'Pulmonology',
+    'unconscious': 'Neurology',
+    'severe bleeding': 'Trauma Surgeon',
+    'heart attack': 'Cardiology',
+    'stroke': 'Neurology',
+    'severe allergic reaction': 'Allergist',
+    'severe burns': 'Burn Specialist'
+}
         if condition.lower() == 'critical':
             return True
         for symptom in symptoms:
