@@ -93,7 +93,7 @@ class TestPatient(unittest.TestCase):
 
     def test_patient_creation(self):
         p = Patient("Alice", 28, "Female", ["cough", "fever"])
-        self.assertTrue(p.id.startswith("HOS-"))
+        self.assertTrue(p.id.startswith("PAT-"))
         self.assertEqual(p.name, "Alice")
         self.assertEqual(p.age, 28)
         self.assertEqual(p.gender, "Female")

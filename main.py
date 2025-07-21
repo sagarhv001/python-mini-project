@@ -17,16 +17,30 @@ def load_patients():
             except Exception:
                 data = {}
             for pid, pinfo in data.items():
+                # Handle age as int or string
+                age = pinfo.get('age', '')
+                try:
+                    age = int(age)
+                except (ValueError, TypeError):
+                    pass
+                # Handle symptoms as list
+                symptoms = pinfo.get('symptoms', [])
+                if not isinstance(symptoms, list):
+                    symptoms = [symptoms]
                 patient = Patient(
-                    pinfo['name'], pinfo['age'], pinfo['gender'], pinfo['symptoms']
+                    pinfo.get('name', ''),
+                    age,
+                    pinfo.get('gender', ''),
+                    symptoms
                 )
                 patient.id = pid
-                patient.assigned_doctor = pinfo.get('assigned_doctor')
-                patient.status = pinfo.get('status')
+                patient.assigned_doctor = pinfo.get('assigned_doctor', None)
+                patient.status = pinfo.get('status', 'registered')
                 patient.history = pinfo.get('history', [])
-                patient.admission = pinfo.get('admission')
-                patient.discharge_date = pinfo.get('discharge_date')
+                patient.admission = pinfo.get('admission', None)
+                patient.discharge_date = pinfo.get('discharge_date', None)
                 patient.bill_amount = pinfo.get('bill_amount', 0)
+                patient.treatment_total_cost = pinfo.get('treatment_total_cost', 0)
                 patients[pid] = patient
 
 def load_doctors():
@@ -59,26 +73,109 @@ def main():
     while True:
         print("\n1. Register Doctor")
         print("2. Register Patient")
-        print("3. Simulate Treatment")
-        print("4. Exit")
+        print("3. List All Doctors")
+        print("4. List All Patients")
+        print("5. Simulate Treatment for Inpatient")
+        print("6. Show Patient History & Bill")
+        print("7. Exit")
         choice = input("Enter choice: ")
 
         if choice == '1':
             register_doctor()
         elif choice == '2':
-            register_patient()
-        elif choice == '3':
+            # Register patient and assign doctor
+            pid = register_patient()
+            load_patients()  # Ensure in-memory patients dict is updated
+            patient = patients[pid]
+            from utilities import assign_doctor_to_patient
+            doctor = assign_doctor_to_patient(patient)
+            if doctor:
+                print(f"Doctor {doctor.name} assigned to patient {patient.name}.")
+                from data_storage import save_patient_to_json
+                save_patient_to_json(patient)  # Persist assigned_doctor
+            else:
+                print("No doctor assigned.")
+            print("\n--- Doctors List ---")
+            for d in doctors.values():
+                print(f"{d.id}: {d.name} ({d.specialization}), Patients: {len(d.patients)}")
+        elif choice == '4':
+            print("\n--- Patients List ---")
+            for p in patients.values():
+                print(f"{p.id}: {p.name}, Status: {p.status}, Assigned Doctor: {p.assigned_doctor}, Bill: ₹{p.bill_amount}")
+        elif choice == '5':
+            if not patients:
+                print("No patients available.")
+                continue
+            print("\nAvailable Inpatients with Assigned Doctor:")
+            valid_patients = [p for p in patients.values() if p.status == 'inpatient' and p.assigned_doctor]
+            if not valid_patients:
+                print("No inpatients with assigned doctor available for treatment simulation.")
+                continue
+            for p in valid_patients:
+                print(f"{p.id}: {p.name} (Doctor: {p.assigned_doctor})")
+            pid = input("Enter Patient ID: ").strip()
+            if pid not in patients:
+                print("Patient not found. Please check the ID and try again.")
+                continue
+            patient = patients[pid]
+            if not patient.assigned_doctor:
+                print(f"Patient {patient.name} does not have an assigned doctor.")
+                assign = input("Assign a doctor now? (y/n): ").lower()
+                if assign == 'y':
+                    from utilities import assign_doctor_to_patient
+                    doctor = assign_doctor_to_patient(patient)
+                    if doctor:
+                        print(f"Assigned to Dr. {doctor.name} ({doctor.specialization})")
+                    else:
+                        print("No doctor assigned. Cannot proceed.")
+                        continue
+                else:
+                    print("Cannot simulate treatment without a doctor.")
+                    continue
+            doctor = next((d for d in doctors.values() if d.name == patient.assigned_doctor), None)
+            if not doctor:
+                print("Assigned doctor not found.")
+                continue
+            if patient.status != 'inpatient':
+                print("Patient is not admitted (inpatient). Cannot simulate treatment.")
+                continue
+            while True:
+                print(f"\nSimulating treatment for {patient.name} (ID: {patient.id})")
+                note = input("Enter condition update: ")
+                treatment = input("Treatment/Test conducted: ")
+                try:
+                    cost = float(input("Enter cost for this treatment/test: ₹"))
+                except ValueError:
+                    print("Invalid cost. Try again.")
+                    continue
+                doctor.log_condition(patient.id, note, treatment, cost)
+                patient.add_history(f"{note}, Treatment: {treatment}", cost=cost)
+                from data_storage import save_patient_to_json, save_doctor_to_json
+                save_patient_to_json(patient)
+                save_doctor_to_json(doctor)
+                print(f"Treatment recorded. Current bill: ₹{patient.bill_amount}")
+                discharge = input("Discharge patient? (y/n): ").lower()
+                if discharge == 'y':
+                    total_cost = sum(entry.get('cost', 0) for entry in patient.history)
+                    doctor.discharge_patient(patient, total_cost)
+                    save_patient_to_json(patient)
+                    save_doctor_to_json(doctor)
+                    print(f"Patient discharged. Final bill: ₹{patient.bill_amount}")
+                    break
+                else:
+                    continue
+        elif choice == '6':
             pid = input("Enter Patient ID: ")
             if pid in patients:
                 patient = patients[pid]
-                doctor = next((d for d in doctors.values() if d.name == patient.assigned_doctor), None)
-                if doctor:
-                    simulate_treatment(patient, doctor)
-                else:
-                    print("Assigned doctor not found.")
+                print(f"\n--- History for {patient.name} (ID: {patient.id}) ---")
+                for entry in patient.history:
+                    print(f"{entry['date']}: {entry['notes']} (Cost: ₹{entry.get('cost', 0)})")
+                print(f"Current Bill: ₹{patient.bill_amount}")
+                print(f"Status: {patient.status}")
             else:
                 print("Patient not found.")
-        elif choice == '4':
+        elif choice == '7':
             break
         else:
             print("Invalid choice.")

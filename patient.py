@@ -58,23 +58,23 @@ class Patient:
         self.admission = datetime.now().strftime("%Y-%m-%d")
         self.status = 'inpatient'
     def discharge(self, bill=None):
-
         self.discharge_date = datetime.now().strftime("%Y-%m-%d")
         if self.status == 'inpatient' or self.admission:
-            self.bill_amount = sum(entry.get('cost', 0) for entry in self.history)
-        elif bill is not None:
-            self.bill_amount = bill
+            # If bill is provided, use it; else sum history
+            if bill is not None:
+                self.bill_amount = bill
+            else:
+                self.bill_amount = sum(entry.get('cost', 0) for entry in self.history)
+        else:
+            # Outpatient: always set to 500
+            self.bill_amount = 500
         self.status = 'discharged'
 
     def set_outpatient(self, notes):
         self.status = 'outpatient'
-        self.bill_amount = 500  # Set a constant consultation fee for outpatients
-
-        print(f"Patient {self.name} discharged with bill ₹{self.bill_amount}")
-    
-    def set_outpatient(self, notes):
-        self.status = 'outpatient'
+        self.bill_amount = 500
         self.add_history(notes)
+        print(f"Patient {self.name} discharged with bill ₹{self.bill_amount}")
     
     def update_bill(self, amount):
         """Add amount to existing bill"""

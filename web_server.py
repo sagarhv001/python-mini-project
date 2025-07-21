@@ -11,7 +11,6 @@ from data_storage import save_patient_to_json, save_doctor_to_json, patients, do
 from main import load_patients, load_doctors
 load_patients()
 load_doctors()
-
 app = Flask(__name__, static_folder='static', template_folder='templates')
 CORS(app)
 
@@ -160,8 +159,8 @@ def simulate_treatment():
 
         cost = float(data.get('cost', 0))
         discharge = data.get('discharge', False)
-
         
+
         if patient_id not in patients:
             return jsonify({
                 'success': False,
@@ -189,32 +188,26 @@ def simulate_treatment():
                 'error': 'Assigned doctor not found'
             }), 404
         
-        # Add treatment note and cost
+        # Add treatment note and cost to patient history
         treatment_note = f"{note}, Treatment: {treatment}"
-        if additional_charges > 0:
-            treatment_note += f", Charges: ₹{additional_charges}"
-        
-        doctor.log_condition(patient.id, treatment_note)
+        if cost > 0:
+            treatment_note += f", Charges: ₹{cost}"
+        doctor.log_condition(patient.id, treatment_note, treatment, cost)
+        patient.add_history(treatment_note, cost)
 
-        # Always update bill_amount and treatment_total_cost
-        if not hasattr(patient, 'treatment_total_cost'):
-            patient.treatment_total_cost = 0
-        patient.bill_amount = patient.treatment_total_cost
-        if discharge:
+        if not discharge:
+            patient.bill_amount = patient.treatment_total_cost
+            message = f"Treatment recorded for {patient.name}. Updated bill: ₹{patient.bill_amount}"
+        else:
             total_cost = sum(entry.get('cost', 0) for entry in patient.history)
             doctor.discharge_patient(patient, total_cost)
             message = f"Patient {patient.name} discharged with bill ₹{total_cost}"
 
-        else:
-            # For regular treatment, add additional charges to existing bill
-            patient.bill_amount += additional_charges
-            message = f"Treatment recorded for {patient.name}. Updated bill: ₹{patient.bill_amount}"
-        
         print(f"Updated patient bill: ₹{patient.bill_amount}")  # Debug log
-        
+
         save_patient_to_json(patient)
         save_doctor_to_json(doctor)
-        
+
         return jsonify({
             'success': True,
             'message': message,
